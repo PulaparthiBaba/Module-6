@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="6c8656e1-1204-41b5-a94b-7640ad73d7f6" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="51a5f36d-ee9a-4d49-9405-bf3a493bf45f" >
+		<http:request-connection host="localhost" port="8081" />
+	</http:request-config>
+	<flow name="app_devFlow" doc:id="158aadb7-cfd5-4a9e-bed4-9f20668a110f" >
+		<http:listener doc:name="GET/hello" doc:id="28b7d4d8-a3b9-452c-a393-38d84df630b2" config-ref="HTTP_Listener_config" path="/hello" />
+		<set-payload value="Hello" doc:name="Hello" doc:id="d56f7343-c647-4dbd-9484-97957ceb700b" />
+		<http:request doc:name="GET /goodbye" doc:id="f949ac79-818b-4a89-ac9a-b1e9c0cbd516" method="GET" path="/goodbye" responseTimeout="300000" config-ref="HTTP_Request_configuration"/>
+		<logger level="INFO" doc:name="Logger" doc:id="4c0a5fdf-5d39-4309-85e6-c84ea1b26963" />
+	</flow>
+	<flow name="goodbyeFlow" doc:id="1336d015-6840-4da0-b61d-31ebc2935469" >
+		<http:listener doc:name="GET /goodbye" doc:id="67990ca4-951f-41c1-9b22-db2b5025a515" config-ref="HTTP_Listener_config" path="/goodbye" allowedMethods="GET"/>
+		<set-payload value="Goodbye" doc:name="Goodbye" doc:id="6dae5fba-ce52-4ef0-bf1e-d4dafeb8f31e" />
+		<logger level="INFO" doc:name="Logger" doc:id="e93fecc6-0785-46b1-a04a-04df769c1f75" message="byebye"/>
+	</flow>
+</mule>
